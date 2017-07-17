@@ -1,16 +1,7 @@
 package queue4go
 
-import (
-	"time"
-)
-
 type QueueItem struct {
-	data     interface{}
-	createAt time.Time
-}
-
-func (this *QueueItem) CreatAt() time.Time {
-	return this.createAt
+	data interface{}
 }
 
 func (this *QueueItem) Data() interface{} {
@@ -18,9 +9,7 @@ func (this *QueueItem) Data() interface{} {
 }
 
 func NewQueueItem(data interface{}) *QueueItem {
-	t := time.Now()
 	return &QueueItem{
-		data:     data,
-		createAt: t,
+		data: data,
 	}
 }

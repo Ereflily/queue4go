@@ -6,7 +6,8 @@ import (
 
 type QueueTable struct {
 	sync.RWMutex
-	items []*QueueItem
+	items  []*QueueItem
+	length int
 }
 
 func (this *QueueTable) Length() int {
@@ -26,11 +27,30 @@ func (this *QueueTable) Pop() interface{} {
 	return value
 }
 
-func (this *QueueTable) Push(item interface{}) bool {
+func (this *QueueTable) SetMaxLength(n int) {
 	this.Lock()
 	defer this.Unlock()
+	this.length = n
+}
+
+func (this *QueueTable) GetMaxLength() int {
+	this.RLock()
+	defer this.RUnlock()
+	return this.length
+}
+
+func (this *QueueTable) Push(item interface{}) bool {
 	data := NewQueueItem(item)
-	this.items = append(this.items, data)
+	this.Lock()
+	defer this.Unlock()
+	if len(this.items) > 0 && len(this.items) < this.length {
+		this.items = append(this.items, data)
+		return data == this.items[0]
+	} else if len(this.items) == 0 {
+		this.items = append(this.items, data)
+	} else {
+		return false
+	}
 	return data == this.items[0]
 }
 

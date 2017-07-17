@@ -18,7 +18,8 @@ func Queue(name string) *QueueTable {
 		_, ok := queue[name]
 		if !ok {
 			queue[name] = &QueueTable{
-				items: make([]*QueueItem, 0, 8),
+				items:  make([]*QueueItem, 0, 8),
+				length: 1000000,
 			}
 		}
 		mutex.Unlock()
