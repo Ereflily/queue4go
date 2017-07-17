@@ -18,7 +18,7 @@ func (this *QueueTable) Length() int {
 func (this *QueueTable) Pop() interface{} {
 	this.Lock()
 	defer this.Unlock()
-	value := this.items[0].data
+	value := this.items[0].Data()
 	this.items = this.items[1:]
 	return value
 }
